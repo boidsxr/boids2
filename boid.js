@@ -81,8 +81,10 @@ class Boid {
     noFill();
     this.trail.forEach(trail => {
       beginShape();
-      trail.forEach(trailEl => {
-        vertex(trailEl.x, trailEl.y);
+      trail.forEach((trailEl, index) => {
+        if (index % 10 == 0) {
+          vertex(trailEl.x, trailEl.y);
+        }
       });
       stroke(204,153,0);
       endShape();
