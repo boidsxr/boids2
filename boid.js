@@ -14,11 +14,8 @@ class Boid {
     this.maxspeed = 3; // Maximum speed
     this.maxforce = 0.05; // Maximum steering force
 
-    // a boid's trail is an array of polygons
-    // When the boid wraps over the boundary, a new trail polygon is
-    // created.
+    // polygon with previous positions
     this.trail = [];
-    this.trail.push([]);
   }
 
   run(boids) {
@@ -56,7 +53,7 @@ class Boid {
     this.velocity.limit(this.maxspeed);
 
     // Save old position in the trail
-    this.trail[0].push(createVector(this.position.x, this.position.y));
+    this.trail.push(createVector(this.position.x, this.position.y));
 
     this.position.add(this.velocity);
     // Reset accelertion to 0 each cycle
@@ -79,16 +76,16 @@ class Boid {
   render() {
     // draw the trail
     noFill();
-    this.trail.forEach(trail => {
-      beginShape();
-      trail.forEach((trailEl, index) => {
-        if (index % 10 == 0) {
-          vertex(trailEl.x, trailEl.y);
-        }
-      });
-      stroke(204,153,0);
-      endShape();
+    stroke(204,153,0);
+    beginShape();
+    this.trail.forEach((trailEl, index) => {
+      if (index % 10 == 0) {
+        vertex(trailEl.x, trailEl.y);
+      }
     });
+    vertex(this.position.x, this.position.y);
+    endShape();
+
 
     // Draw a triangle rotated in the direction of velocity
     let theta = this.velocity.heading() + radians(90);
@@ -105,25 +102,20 @@ class Boid {
     pop();
   }
 
-  // Wraparound
+  // Bounce off walls
   borders() {
     if (this.position.x < -this.r) {
-      // The boid reappears on the other side and we must create
-      // a new trail segment
-      this.trail.unshift([]);
-      this.position.x = width + this.r;
+      this.velocity.x = -this.velocity.x;
+
     }
     if (this.position.y < -this.r) {
-      this.trail.unshift([]);
-      this.position.y = height + this.r;
+      this.velocity.y = -this.velocity.y;
     }
     if (this.position.x > width + this.r) {
-      this.trail.unshift([]);
-      this.position.x = -this.r;
+      this.velocity.x = -this.velocity.x;
     }
     if (this.position.y > height + this.r) {
-      this.trail.unshift([]);
-      this.position.y = -this.r;
+      this.velocity.y = -this.velocity.y;
     }
   }
 
