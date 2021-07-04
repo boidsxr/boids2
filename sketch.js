@@ -12,12 +12,25 @@ let flock;
 
 let text;
 
+let cosmoDragonColorPalette;
+
+// From https://www.color-hex.com/color-palette/111191
+
 function setup() {
+  cosmoDragonColorPalette = [
+    color(21,38,124),
+    color(67,146,206),
+    color(255,148,14),
+    color(223,0,146),
+    color(122,9,55)
+  ];
   createCanvas(1200, 720);
   flock = new Flock();
   // Add an initial set of boids into the system
   for (let i = 0; i < 60; i++) {
-    let b = new Boid(width / 2, height / 2);
+    const paletteIndex = Math.floor(random(cosmoDragonColorPalette.length));
+    const color = cosmoDragonColorPalette[paletteIndex];
+    let b = new Boid(width / 2, height / 2, color);
     flock.addBoid(b);
   }
 }

@@ -6,13 +6,14 @@
 // Methods for Separation, Cohesion, Alignment added
 
 class Boid {
-  constructor(x, y) {
+  constructor(x, y, color) {
     this.acceleration = createVector(0, 0);
     this.velocity = createVector(random(-1, 1), random(-1, 1));
     this.position = createVector(x, y);
     this.r = 3.0;
     this.maxspeed = 3; // Maximum speed
     this.maxforce = 0.05; // Maximum steering force
+    this.color = color;
 
     // polygon with previous positions
     this.trail = [];
@@ -55,6 +56,11 @@ class Boid {
     // Save old position in the trail
     this.trail.push(createVector(this.position.x, this.position.y));
 
+    // Keep trail length at specific length
+    if (this.trail.length == 200) {
+      this.trail.shift();
+    }
+
     this.position.add(this.velocity);
     // Reset accelertion to 0 each cycle
     this.acceleration.mult(0);
@@ -75,8 +81,10 @@ class Boid {
 
   render() {
     // draw the trail
+    push();
     noFill();
-    stroke(204,153,0);
+    stroke(this.color);
+    strokeWeight(this.r);
     beginShape();
     this.trail.forEach((trailEl, index) => {
       if (index % 10 == 0) {
@@ -85,13 +93,14 @@ class Boid {
     });
     vertex(this.position.x, this.position.y);
     endShape();
-
+//    pop();
 
     // Draw a triangle rotated in the direction of velocity
     let theta = this.velocity.heading() + radians(90);
-    fill(127);
+//    fill(127);
+    fill(this.color);
     stroke(200);
-    push();
+//    push();
     translate(this.position.x, this.position.y);
     rotate(theta);
     beginShape();
