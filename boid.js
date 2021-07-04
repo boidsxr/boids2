@@ -13,6 +13,7 @@ class Boid {
     this.r = 3.0;
     this.maxspeed = 3; // Maximum speed
     this.maxforce = 0.05; // Maximum steering force
+    this.tail = [];
   }
 
   run(boids) {
@@ -48,6 +49,10 @@ class Boid {
     this.velocity.add(this.acceleration);
     // Limit speed
     this.velocity.limit(this.maxspeed);
+
+    // Save old position in tail
+    this.tail.push(createVector(this.position.x, this.position.y));
+
     this.position.add(this.velocity);
     // Reset accelertion to 0 each cycle
     this.acceleration.mult(0);
@@ -67,6 +72,18 @@ class Boid {
   }
 
   render() {
+
+    // draw the tail
+    noFill();
+    beginShape();
+    this.tail.forEach(tailEl => {
+      vertex(tailEl.x, tailEl.y);
+    });
+    stroke(204,153,0);
+    endShape();
+
+
+
     // Draw a triangle rotated in the direction of velocity
     let theta = this.velocity.heading() + radians(90);
     fill(127);
@@ -80,6 +97,9 @@ class Boid {
     vertex(this.r, this.r * 2);
     endShape(CLOSE);
     pop();
+
+
+
   }
 
   // Wraparound
