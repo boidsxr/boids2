@@ -13,7 +13,12 @@ class Boid {
     this.r = 3.0;
     this.maxspeed = 3; // Maximum speed
     this.maxforce = 0.05; // Maximum steering force
-    this.tail = [];
+
+    // a boid's trail is an array of polygons
+    // When the boid wraps over the boundary, a new trail polygon is
+    // created.
+    this.trail = [];
+    this.trail.push([]);
   }
 
   run(boids) {
@@ -50,8 +55,8 @@ class Boid {
     // Limit speed
     this.velocity.limit(this.maxspeed);
 
-    // Save old position in tail
-    this.tail.push(createVector(this.position.x, this.position.y));
+    // Save old position in the trail
+    this.trail[0].push(createVector(this.position.x, this.position.y));
 
     this.position.add(this.velocity);
     // Reset accelertion to 0 each cycle
@@ -72,17 +77,16 @@ class Boid {
   }
 
   render() {
-
-    // draw the tail
+    // draw the trail
     noFill();
-    beginShape();
-    this.tail.forEach(tailEl => {
-      vertex(tailEl.x, tailEl.y);
+    this.trail.forEach(trail => {
+      beginShape();
+      trail.forEach(trailEl => {
+        vertex(trailEl.x, trailEl.y);
+      });
+      stroke(204,153,0);
+      endShape();
     });
-    stroke(204,153,0);
-    endShape();
-
-
 
     // Draw a triangle rotated in the direction of velocity
     let theta = this.velocity.heading() + radians(90);
@@ -97,17 +101,28 @@ class Boid {
     vertex(this.r, this.r * 2);
     endShape(CLOSE);
     pop();
-
-
-
   }
 
   // Wraparound
   borders() {
-    if (this.position.x < -this.r) this.position.x = width + this.r;
-    if (this.position.y < -this.r) this.position.y = height + this.r;
-    if (this.position.x > width + this.r) this.position.x = -this.r;
-    if (this.position.y > height + this.r) this.position.y = -this.r;
+    if (this.position.x < -this.r) {
+      // The boid reappears on the other side and we must create
+      // a new trail segment
+      this.trail.unshift([]);
+      this.position.x = width + this.r;
+    }
+    if (this.position.y < -this.r) {
+      this.trail.unshift([]);
+      this.position.y = height + this.r;
+    }
+    if (this.position.x > width + this.r) {
+      this.trail.unshift([]);
+      this.position.x = -this.r;
+    }
+    if (this.position.y > height + this.r) {
+      this.trail.unshift([]);
+      this.position.y = -this.r;
+    }
   }
 
   // Separation
