@@ -27,13 +27,16 @@ class Boid {
 
     this.position = new Vector2d(Math.random()*width, Math.random()*height)
 
+    // initialspeed should depend on altitude otherwise high altitude crash immediately
+    const initialSpeed = 4 * Math.sign(Math.random()-.5);
+
     this.velocity = new Vector2d(
-      this.centre.y - this.position.y,
+      - (this.centre.y - this.position.y),
       this.centre.x - this.position.x
-    );//.setMag(10+10*Math.random());
+    ).setMag(initialSpeed);
 
     this.previousPosition = this.position.copy();
-//    this.colour = '#f09a0f';
+
 
     this.maxforce = 0.05; // Maximum steering force
     this.wrap = wrap;
@@ -78,7 +81,8 @@ class Boid {
     // Reset accelertion to 0 each cycle
     this.acceleration.mult(0);
 
-    if (this.position.dist(this.centre) <50) {
+    this.altitude = this.position.dist(this.centre);
+    if (this.altitude <50) {
       this.isCrashed = true;
     }
   }
@@ -152,7 +156,7 @@ class Boid {
           (this.position.x - this.centre.x)*(this.position.x - this.centre.x) +
           (this.position.y - this.centre.y)*(this.position.y - this.centre.y);
     const G = 10;
-    const m1m2 = 0.000000001;
+    const m1m2 = 0.0000000001;
     const direction = new Vector2d(
       this.width/2 - this.position.x,
       this.height/2 - this.position.y

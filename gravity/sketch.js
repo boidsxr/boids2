@@ -29,11 +29,12 @@ flock = new Flock(ctx, nbBoids, canvas.width, canvas.height, featureWrap);
 function draw() {
   flock.run();
   if (featureFadeout) {
-    ctx.fillStyle = 'rgba(1,1,1,0.1)';
+    ctx.fillStyle = 'rgba(1,1,1,0.01)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.globalCompositeOperation = 'darken';
 
   }
+//  setTimeout(()=> window.requestAnimationFrame(draw), 10000);
   window.requestAnimationFrame(draw);
 }
 
