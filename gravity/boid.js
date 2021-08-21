@@ -12,7 +12,7 @@ const cohesionNeighborDist = 50; //00;
 const alignNeighborDist = 50; //00;
 const desiredSeparation = 10; // 25;
 const borderTolerance = 1;
-const maxspeed = 10;
+const maxspeed = 30;
 
 
 class Boid {
@@ -38,7 +38,7 @@ class Boid {
     this.previousPosition = this.position.copy();
 
 
-    this.maxforce = 0.05; // Maximum steering force
+    this.maxforce = 0.1; // Maximum steering force
     this.wrap = wrap;
   }
 
