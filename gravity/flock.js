@@ -7,7 +7,7 @@
 
 class Flock {
 
-  constructor(ctx, numBoids, width, height, wrap) {
+  constructor(ctx, numBoids, width, height, wrap, initialSpeedFactor) {
     // An array for all the boids
     this.boids = []; // Initialize the array
     this.ctx = ctx;
@@ -17,7 +17,7 @@ class Flock {
     // Add an initial set of boids into the system
     for (let i = 0; i < numBoids; i++) {
       const colour = { h: 0, s: 100, l: 50, a: 1 };
-      let b = new Boid(this.ctx, this.width / 5, this.height / 7, colour, width, height, wrap);
+      let b = new Boid(this.ctx, this.width / 5, this.height / 7, colour, width, height, wrap, initialSpeedFactor);
       this.boids.push(b);
     }
   }

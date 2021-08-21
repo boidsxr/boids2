@@ -7,8 +7,17 @@
 // Rules: Cohesion, Separation, Alignment
 
 
+const urlSearchParams = new URLSearchParams(window.location.search);
+const params = Object.fromEntries(urlSearchParams.entries());
 
-const nbBoids = 100;
+console.log(params);
+
+const nbBoids = params.nbBoids || 100 ;
+const initialSpeedFactor = params.isf || 0.00005;
+
+console.log(initialSpeedFactor);
+
+
 const featureFadeout = true;
 const featureWrap = false;
 
@@ -24,7 +33,7 @@ ctx.lineWidth = 10;
 ctx.lineCap = 'round';
 
 
-flock = new Flock(ctx, nbBoids, canvas.width, canvas.height, featureWrap);
+flock = new Flock(ctx, nbBoids, canvas.width, canvas.height, featureWrap, initialSpeedFactor);
 
 function draw() {
   flock.run();
