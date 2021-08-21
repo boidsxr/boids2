@@ -10,13 +10,8 @@
 const urlSearchParams = new URLSearchParams(window.location.search);
 const params = Object.fromEntries(urlSearchParams.entries());
 
-console.log(params);
-
 const nbBoids = params.nbBoids || 100 ;
-const initialSpeedFactor = params.isf || 0.00005;
-
-console.log(initialSpeedFactor);
-
+const initialSpeedFactor = params.isf || 0.001;
 
 const featureFadeout = true;
 const featureWrap = false;

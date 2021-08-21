@@ -12,7 +12,7 @@ const cohesionNeighborDist = 50; //00;
 const alignNeighborDist = 50; //00;
 const desiredSeparation = 10; // 25;
 const borderTolerance = 1;
-const maxspeed = 100;
+const maxspeed = 10;
 
 
 class Boid {
@@ -26,12 +26,7 @@ class Boid {
     this.centre = new Vector2d(this.width/2, this.height/2);
 
     this.position = new Vector2d(Math.random()*width, Math.random()*height)
-
-    // initialspeed should depend on altitude otherwise high altitude crash immediately
-
     this.altitude = this.position.dist(this.centre);
-
-    console.log('1', initialSpeedFactor);
 
     const initialSpeed = initialSpeedFactor * Math.sign(Math.random()-.5) * this.altitude * this.altitude;
 
